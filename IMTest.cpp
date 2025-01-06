@@ -97,6 +97,7 @@ static XIC createXIC(XIM xim, Window win)
 {
     XIC xic;
     XVaNestedList preedit_attr;
+    XIMStyle input_style = 0;
     
     XIMCallback state_callback = { NULL, (XIMProc)preedit_state_callback };
     XIMCallback draw_callback  = { NULL, (XIMProc)preedit_draw_callback  };
@@ -118,8 +119,10 @@ static XIC createXIC(XIM xim, Window win)
      * 在ubuntu上，会阻止候选框移动(即导致XNSpotLocation设置无效)。
      * 所以考虑到通用，必须使用XIMPreeditNothing
      */
+    input_style = XIMPreeditNothing   | XIMStatusNothing;
+    input_style = XIMPreeditCallbacks | XIMStatusCallbacks;
     xic = XCreateIC( xim,
-                     XNInputStyle,        XIMPreeditNothing|XIMStatusNothing,
+                     XNInputStyle,        input_style,
                      XNClientWindow,      win,
                      XNPreeditAttributes, preedit_attr,
                      NULL );
